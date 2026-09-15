@@ -1,38 +1,43 @@
 class Solution {
 public:
-    int solve(vector<int>& nums, int i, int n, vector<int>& dp) {
-        if (i > n) {
-            return 0;
-        }
-
-        if (dp[i] != -1) {
-            return dp[i];
-        }
-
-        int take = nums[i] + solve(nums, i + 2, n, dp);
-        int nottake = solve(nums, i + 1,n, dp);
-
-        return dp[i] = max(take, nottake);
-    }
 
     int rob(vector<int>& nums) {
         int n = nums.size();
 
-        if (n == 1) {
+        if (n == 1)
             return nums[0];
-        }
 
-        if (n == 2) {
+        if (n == 2)
             return max(nums[0], nums[1]);
+
+        // Case 1: houses 0 to n-2
+        vector<int> dp(n, 0);
+
+        dp[0] = nums[0];
+
+        for (int i = 1; i <= n - 2; i++) {
+            int take = nums[i] + (i >= 2 ? dp[i - 2] : 0);
+            int nottake = dp[i - 1];
+
+            dp[i] = max(take, nottake);
         }
 
+        int result1 = dp[n - 2];
 
-        vector<int> dp1(n, -1);
-        int case1 = solve(nums, 0, n - 2, dp1);
+        // Case 2: houses 1 to n-1
+        dp.assign(n, 0);
 
-        vector<int> dp2(n, -1);
-        int case2 = solve(nums, 1, n - 1, dp2);
+        dp[1] = nums[1];
 
-        return max(case1, case2);
+        for (int i = 2; i <= n - 1; i++) {
+            int take = nums[i] + dp[i - 2];
+            int nottake = dp[i - 1];
+
+            dp[i] = max(take, nottake);
+        }
+
+        int result2 = dp[n - 1];
+
+        return max(result1, result2);
     }
 };
