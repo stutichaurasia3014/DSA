@@ -23,22 +23,40 @@
 // };
 
 // BOTTOM UP APPROACH
+// class Solution {
+// public:
+//     bool canJump(vector<int>& nums) {
+//         int n =nums.size();
+//         vector<bool> dp(n,false);
+
+//         dp[0]=true;
+
+//         for(int i=1;i<n;i++){
+//             for(int j=i-1;j>=0;j--){
+//                 if(dp[j]==true && j+nums[j] >=i){
+//                     dp[i]=true;
+//                     break;
+//                 }
+//             }
+//         }
+//         return dp[n-1];
+//     }
+// };
+
+
+// LINEAR SOLUTION
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
         int n =nums.size();
-        vector<bool> dp(n,false);
+       int maxreachable=0;
 
-        dp[0]=true;
-
-        for(int i=1;i<n;i++){
-            for(int j=i-1;j>=0;j--){
-                if(dp[j]==true && j+nums[j] >=i){
-                    dp[i]=true;
-                    break;
-                }
-            }
+       for(int i=0;i<n;i++){
+        if(i>maxreachable){
+            return false;
         }
-        return dp[n-1];
+        maxreachable=max(maxreachable,nums[i]+i);
+       }
+       return true;
     }
 };
